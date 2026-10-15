@@ -1,26 +1,28 @@
 /*
  * Module: Navbar
- * Description: Header navigation with permanent institutional branding (RN-01) and entrepreneur logo
+ * Description: Minimalist, elegant M3 top navigation bar focused on the entrepreneur's brand
  * Created: 2026-10-15
  * by: Bastian Proboste :D
  *
  * Changelog:
- * - 2026-10-15 [v0.1.0]: Initial implementation of responsive Navbar with RN-01 branding.
+ * - 2026-10-15 [v0.1.0]: Initial implementation of responsive Navbar.
+ * - 2026-10-15 [v0.2.0]: Streamlined to elegant white-label design with M3 light/dark mode toggle.
  */
 
 import React, { useState } from 'react';
 import { useStoreConfig } from '../../context/StoreConfigContext';
-import { UniversityLogo } from '../common/UniversityLogo';
-import { Store, Sliders, ShoppingBag, Menu, X } from 'lucide-react';
+import { Sun, Moon, Sliders, ShoppingBag, Menu, X, ArrowUpRight } from 'lucide-react';
 
 export function Navbar({ currentPath, onNavigate }) {
-  const { config } = useStoreConfig();
+  const { config, toggleColorMode } = useStoreConfig();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+
+  const isDarkMode = config.color_mode === 'dark';
 
   const navItems = [
     { label: 'Inicio', path: '/' },
     { label: 'Catálogo', path: '/catalogo' },
-    { label: 'Personalización', path: '/admin/personalizacion', badge: 'Admin' },
+    { label: 'Personalización', path: '/admin/personalizacion', isSpecial: true },
   ];
 
   const handleNavClick = (path) => {
@@ -34,9 +36,9 @@ export function Navbar({ currentPath, onNavigate }) {
         position: 'sticky',
         top: 0,
         zIndex: 100,
-        backgroundColor: 'rgba(9, 9, 11, 0.92)',
-        backdropFilter: 'blur(12px)',
-        borderBottom: '1px solid var(--border-color)',
+        backgroundColor: 'var(--md-sys-color-surface)',
+        borderBottom: '1px solid var(--md-sys-color-outline-variant)',
+        transition: 'background-color var(--md-transition), border-color var(--md-transition)',
       }}
     >
       <div
@@ -45,172 +47,184 @@ export function Navbar({ currentPath, onNavigate }) {
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'space-between',
-          height: '74px',
-          gap: '1rem',
+          height: '68px',
+          gap: '1.5rem',
         }}
       >
-        {/* Left Side: RN-01 Mandatory University Branding + Entrepreneur Store Identity */}
-        <div style={{ display: 'flex', alignItems: 'center', gap: '1.25rem' }}>
-          {/* RN-01: Permanent, non-removable institutional seal */}
-          <UniversityLogo size="medium" />
-
-          {/* Divider */}
-          <div
-            style={{
-              height: '32px',
-              width: '1px',
-              backgroundColor: 'var(--border-color)',
-            }}
-          />
-
-          {/* Entrepreneur Store Logo or Brand Title */}
-          <button
-            onClick={() => handleNavClick('/')}
-            style={{
-              background: 'none',
-              border: 'none',
-              cursor: 'pointer',
-              display: 'flex',
-              alignItems: 'center',
-              gap: '0.6rem',
-              textAlign: 'left',
-            }}
-          >
-            {config.logo_url && config.logo_url.trim() ? (
-              <img
-                src={config.logo_url}
-                alt={config.store_name}
-                style={{
-                  height: '36px',
-                  maxWidth: '140px',
-                  objectFit: 'contain',
-                  borderRadius: '4px',
-                }}
-              />
-            ) : (
-              <div
-                style={{
-                  width: '34px',
-                  height: '34px',
-                  borderRadius: '8px',
-                  backgroundColor: 'var(--primary-light)',
-                  border: '1px solid var(--primary-border)',
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  color: 'var(--primary)',
-                }}
-              >
-                <Store size={18} />
-              </div>
-            )}
-            <div>
-              <div
-                style={{
-                  fontSize: '0.95rem',
-                  fontWeight: 700,
-                  color: 'var(--text-main)',
-                  letterSpacing: '-0.01em',
-                }}
-              >
-                {config.store_name || 'Mi Emprendimiento'}
-              </div>
-              <div
-                style={{
-                  fontSize: '0.7rem',
-                  fontFamily: 'var(--font-mono)',
-                  color: 'var(--text-subtle)',
-                }}
-              >
-                Tienda Oficial
-              </div>
-            </div>
-          </button>
-        </div>
-
-        {/* Desktop Navigation Links */}
-        <nav
+        {/* Entrepreneur Brand Identity */}
+        <button
+          onClick={() => handleNavClick('/')}
           style={{
-            display: 'none',
+            background: 'none',
+            border: 'none',
+            cursor: 'pointer',
+            display: 'flex',
             alignItems: 'center',
-            gap: '0.5rem',
+            gap: '0.75rem',
+            textAlign: 'left',
+            padding: 0,
           }}
-          className="desktop-nav"
         >
-          {navItems.map((item) => {
-            const isActive = currentPath === item.path;
-            return (
-              <button
-                key={item.path}
-                onClick={() => handleNavClick(item.path)}
-                style={{
-                  padding: '0.45rem 0.9rem',
-                  fontSize: '0.875rem',
-                  fontWeight: isActive ? 600 : 500,
-                  color: isActive ? 'var(--primary)' : 'var(--text-muted)',
-                  backgroundColor: isActive ? 'var(--primary-light)' : 'transparent',
-                  border: isActive ? '1px solid var(--primary-border)' : '1px solid transparent',
-                  borderRadius: 'var(--radius-md)',
-                  cursor: 'pointer',
-                  display: 'inline-flex',
-                  alignItems: 'center',
-                  gap: '0.4rem',
-                  transition: 'all var(--transition-fast)',
-                }}
-              >
-                {item.path === '/catalogo' && <ShoppingBag size={15} />}
-                {item.path === '/admin/personalizacion' && <Sliders size={15} />}
-                {item.label}
-                {item.badge && (
-                  <span
+          {config.logo_url && config.logo_url.trim() ? (
+            <img
+              src={config.logo_url}
+              alt={config.store_name}
+              style={{
+                height: '38px',
+                maxWidth: '160px',
+                objectFit: 'contain',
+              }}
+            />
+          ) : (
+            <div
+              style={{
+                width: '32px',
+                height: '32px',
+                borderRadius: 'var(--md-shape-sm)',
+                backgroundColor: 'var(--md-sys-color-primary-container)',
+                color: 'var(--md-sys-color-on-primary-container)',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                fontWeight: 800,
+                fontSize: '0.95rem',
+                fontFamily: 'var(--font-sans)',
+              }}
+            >
+              {(config.store_name || 'T')[0].toUpperCase()}
+            </div>
+          )}
+
+          <div>
+            <div
+              style={{
+                fontSize: '1.05rem',
+                fontWeight: 700,
+                color: 'var(--md-sys-color-on-surface)',
+                letterSpacing: '-0.02em',
+                lineHeight: 1.2,
+              }}
+            >
+              {config.store_name || 'Tienda & Estudio'}
+            </div>
+          </div>
+        </button>
+
+        {/* Desktop Navigation & Actions */}
+        <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
+          <nav
+            style={{
+              display: 'none',
+              alignItems: 'center',
+              gap: '0.35rem',
+            }}
+            className="desktop-nav"
+          >
+            {navItems.map((item) => {
+              const isActive = currentPath === item.path;
+              if (item.isSpecial) {
+                return (
+                  <button
+                    key={item.path}
+                    onClick={() => handleNavClick(item.path)}
                     style={{
-                      fontSize: '0.65rem',
-                      fontFamily: 'var(--font-mono)',
-                      backgroundColor: 'rgba(255, 255, 255, 0.08)',
-                      padding: '0.1rem 0.35rem',
-                      borderRadius: '4px',
-                      color: 'var(--text-subtle)',
+                      padding: '0.45rem 0.85rem',
+                      fontSize: '0.825rem',
+                      fontWeight: 600,
+                      color: isActive ? 'var(--md-sys-color-on-primary-container)' : 'var(--md-sys-color-primary)',
+                      backgroundColor: isActive ? 'var(--md-sys-color-primary-container)' : 'transparent',
+                      border: '1px solid var(--md-sys-color-outline-variant)',
+                      borderRadius: 'var(--md-shape-full)',
+                      cursor: 'pointer',
+                      display: 'inline-flex',
+                      alignItems: 'center',
+                      gap: '0.35rem',
+                      marginLeft: '0.5rem',
+                      transition: 'all var(--md-transition)',
                     }}
                   >
-                    {item.badge}
-                  </span>
-                )}
-              </button>
-            );
-          })}
-        </nav>
+                    <Sliders size={14} />
+                    <span>{item.label}</span>
+                  </button>
+                );
+              }
 
-        {/* Mobile Menu Toggle Button */}
-        <button
-          onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-          style={{
-            display: 'inline-flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            background: 'none',
-            border: '1px solid var(--border-color)',
-            borderRadius: '6px',
-            padding: '0.4rem',
-            color: 'var(--text-main)',
-            cursor: 'pointer',
-          }}
-          className="mobile-toggle"
-          aria-label="Abrir menú"
-        >
-          {mobileMenuOpen ? <X size={20} /> : <Menu size={20} />}
-        </button>
+              return (
+                <button
+                  key={item.path}
+                  onClick={() => handleNavClick(item.path)}
+                  style={{
+                    padding: '0.45rem 0.85rem',
+                    fontSize: '0.875rem',
+                    fontWeight: isActive ? 600 : 500,
+                    color: isActive ? 'var(--md-sys-color-primary)' : 'var(--md-sys-color-on-surface-variant)',
+                    backgroundColor: isActive ? 'var(--md-sys-color-surface-container-high)' : 'transparent',
+                    border: 'none',
+                    borderRadius: 'var(--md-shape-sm)',
+                    cursor: 'pointer',
+                    transition: 'all var(--md-transition)',
+                  }}
+                >
+                  {item.label}
+                </button>
+              );
+            })}
+          </nav>
+
+          {/* Light / Dark Mode M3 Toggle */}
+          <button
+            onClick={toggleColorMode}
+            title={isDarkMode ? 'Cambiar a modo claro' : 'Cambiar a modo oscuro'}
+            style={{
+              width: '36px',
+              height: '36px',
+              borderRadius: 'var(--md-shape-full)',
+              backgroundColor: 'var(--md-sys-color-surface-container)',
+              color: 'var(--md-sys-color-on-surface-variant)',
+              border: '1px solid var(--md-sys-color-outline-variant)',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              cursor: 'pointer',
+              transition: 'all var(--md-transition)',
+            }}
+            aria-label="Alternar tema claro y oscuro"
+          >
+            {isDarkMode ? <Sun size={17} /> : <Moon size={17} />}
+          </button>
+
+          {/* Mobile Menu Toggle */}
+          <button
+            onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+            style={{
+              display: 'inline-flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              background: 'none',
+              border: '1px solid var(--md-sys-color-outline-variant)',
+              borderRadius: 'var(--md-shape-sm)',
+              padding: '0.4rem',
+              color: 'var(--md-sys-color-on-surface)',
+              cursor: 'pointer',
+            }}
+            className="mobile-toggle"
+            aria-label="Abrir menú"
+          >
+            {mobileMenuOpen ? <X size={20} /> : <Menu size={20} />}
+          </button>
+        </div>
       </div>
 
       {/* Mobile Drawer */}
       {mobileMenuOpen && (
         <div
           style={{
-            backgroundColor: 'var(--bg-surface)',
-            borderBottom: '1px solid var(--border-color)',
+            backgroundColor: 'var(--md-sys-color-surface-container-low)',
+            borderBottom: '1px solid var(--md-sys-color-outline-variant)',
             padding: '1rem 1.5rem',
             display: 'flex',
             flexDirection: 'column',
-            gap: '0.5rem',
+            gap: '0.4rem',
           }}
         >
           {navItems.map((item) => (
@@ -222,36 +236,21 @@ export function Navbar({ currentPath, onNavigate }) {
                 alignItems: 'center',
                 justifyContent: 'space-between',
                 padding: '0.75rem 1rem',
-                backgroundColor: currentPath === item.path ? 'var(--primary-light)' : 'transparent',
-                color: currentPath === item.path ? 'var(--primary)' : 'var(--text-main)',
-                border: '1px solid',
-                borderColor: currentPath === item.path ? 'var(--primary-border)' : 'var(--border-color)',
-                borderRadius: '8px',
+                backgroundColor: currentPath === item.path ? 'var(--md-sys-color-surface-container-high)' : 'transparent',
+                color: currentPath === item.path ? 'var(--md-sys-color-primary)' : 'var(--md-sys-color-on-surface)',
+                border: 'none',
+                borderRadius: 'var(--md-shape-sm)',
                 fontSize: '0.9rem',
                 fontWeight: 600,
                 cursor: 'pointer',
               }}
             >
               <span>{item.label}</span>
-              {item.badge && (
-                <span
-                  style={{
-                    fontSize: '0.7rem',
-                    fontFamily: 'var(--font-mono)',
-                    backgroundColor: 'rgba(255, 255, 255, 0.08)',
-                    padding: '0.15rem 0.4rem',
-                    borderRadius: '4px',
-                  }}
-                >
-                  {item.badge}
-                </span>
-              )}
             </button>
           ))}
         </div>
       )}
 
-      {/* CSS helper for responsive desktop nav */}
       <style>{`
         @media (min-width: 769px) {
           .desktop-nav { display: flex !important; }

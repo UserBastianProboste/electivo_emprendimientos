@@ -23,6 +23,7 @@ class StoreConfigDTO:
     logo_url: str
     favicon_url: str
     catalog_layout: str
+    color_mode: str
     updated_at: Optional[str]
 
     @classmethod
@@ -38,6 +39,7 @@ class StoreConfigDTO:
             logo_url=entity.logo_url,
             favicon_url=entity.favicon_url,
             catalog_layout=entity.catalog_layout.value,
+            color_mode=entity.color_mode.value,
             updated_at=entity.updated_at,
         )
 
@@ -53,3 +55,4 @@ class UpdateStoreConfigDTO:
     logo_url: Optional[str] = None
     favicon_url: Optional[str] = None
     catalog_layout: Optional[str] = None
+    color_mode: Optional[str] = None

@@ -20,18 +20,18 @@ class StoreConfigModel(models.Model):
 
     store_name = models.CharField(
         max_length=255,
-        default='Mi Emprendimiento Comunitario'
+        default='Tienda & Estudio'
     )
     hero_title = models.CharField(
         max_length=255,
-        default='Impulsa tu Negocio Local con Nuestra Vitrina Digital'
+        default='Diseño, Calidad y Autenticidad en Cada Detalle'
     )
     hero_subtitle = models.TextField(
-        default='Descubre productos artesanales, sostenibles y de alta calidad elaborados por emprendedores de nuestra comunidad.'
+        default='Descubre una cuidada selección de productos creados con dedicación, sostenibilidad y excelencia.'
     )
     hero_cta_text = models.CharField(
         max_length=100,
-        default='Explorar Catalogo'
+        default='Explorar Catálogo'
     )
     theme_id = models.IntegerField(default=1)
     logo_url = models.TextField(blank=True, default='')
@@ -40,6 +40,11 @@ class StoreConfigModel(models.Model):
         max_length=20,
         choices=LAYOUT_CHOICES,
         default='grid-3'
+    )
+    color_mode = models.CharField(
+        max_length=10,
+        default='light',
+        choices=[('light', 'Light Mode'), ('dark', 'Dark Mode')]
     )
     updated_at = models.DateTimeField(auto_now=True)
 

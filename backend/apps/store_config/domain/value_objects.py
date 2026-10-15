@@ -8,6 +8,7 @@
 
 from dataclasses import dataclass
 from apps.store_config.domain.exceptions import (
+    StoreConfigDomainException,
     InvalidThemeException,
     InvalidCatalogLayoutException,
 )
@@ -39,3 +40,18 @@ class CatalogLayout:
             raise InvalidCatalogLayoutException(
                 f"Layout '{self.value}' is unsupported. Allowed values are {self.ALLOWED_LAYOUTS}."
             )
+
+
+@dataclass(frozen=True)
+class ColorMode:
+    """Represents active Material 3 color mode (light or dark)."""
+    value: str
+
+    ALLOWED_MODES = ("light", "dark")
+
+    def __post_init__(self) -> None:
+        if self.value not in self.ALLOWED_MODES:
+            raise StoreConfigDomainException(
+                f"Color mode '{self.value}' is invalid. Allowed modes are {self.ALLOWED_MODES}."
+            )
+

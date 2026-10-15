@@ -1,11 +1,12 @@
 /*
  * Module: DynamicFilterPanel
- * Description: Faceted search panel supporting dynamic industry attributes discovered from MongoDB (RF-01.3)
+ * Description: Material Design 3 (M3) faceted search panel with dynamic industry attributes (RF-01.3)
  * Created: 2026-10-15
  * by: Bastian Proboste :D
  *
  * Changelog:
  * - 2026-10-15 [v0.1.0]: Initial implementation of dynamic polymorphic filter panel.
+ * - 2026-10-15 [v0.2.0]: Updated to Google M3 chip styles, surface containers, and typography.
  */
 
 import React, { useState } from 'react';
@@ -57,13 +58,14 @@ export function DynamicFilterPanel({
   return (
     <aside
       style={{
-        backgroundColor: 'var(--bg-surface)',
-        border: '1px solid var(--border-color)',
-        borderRadius: 'var(--radius-lg)',
+        backgroundColor: 'var(--md-sys-color-surface-container-low)',
+        border: '1px solid var(--md-sys-color-outline-variant)',
+        borderRadius: 'var(--md-shape-lg)',
         padding: '1.5rem',
         display: 'flex',
         flexDirection: 'column',
         gap: '1.5rem',
+        boxShadow: 'var(--md-elevation-1)',
       }}
     >
       {/* Panel Header */}
@@ -72,14 +74,14 @@ export function DynamicFilterPanel({
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'space-between',
-          borderBottom: '1px solid var(--border-color)',
+          borderBottom: '1px solid var(--md-sys-color-outline-variant)',
           paddingBottom: '0.85rem',
         }}
       >
         <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-          <Filter size={18} color="var(--primary)" />
-          <h2 style={{ fontSize: '1rem', fontWeight: 700, color: 'var(--text-main)' }}>
-            Filtros del Catálogo
+          <Filter size={18} color="var(--md-sys-color-primary)" />
+          <h2 style={{ fontSize: '0.95rem', fontWeight: 700, color: 'var(--md-sys-color-on-surface)' }}>
+            Filtros
           </h2>
         </div>
 
@@ -89,9 +91,9 @@ export function DynamicFilterPanel({
             style={{
               background: 'none',
               border: 'none',
-              color: 'var(--primary)',
+              color: 'var(--md-sys-color-primary)',
               fontSize: '0.75rem',
-              fontFamily: 'var(--font-mono)',
+              fontWeight: 600,
               display: 'flex',
               alignItems: 'center',
               gap: '0.3rem',
@@ -110,45 +112,45 @@ export function DynamicFilterPanel({
           htmlFor="catalog-search"
           style={{
             display: 'block',
-            fontSize: '0.8rem',
+            fontSize: '0.78rem',
             fontWeight: 600,
-            color: 'var(--text-muted)',
-            marginBottom: '0.5rem',
+            color: 'var(--md-sys-color-on-surface-variant)',
+            marginBottom: '0.45rem',
             textTransform: 'uppercase',
             letterSpacing: '0.04em',
           }}
         >
-          Búsqueda Rápida
+          Búsqueda
         </label>
         <div style={{ position: 'relative' }}>
           <input
             id="catalog-search"
             type="text"
-            placeholder="Buscar por nombre, marca..."
+            placeholder="Buscar productos..."
             value={filters.search || ''}
             onChange={(e) => onFilterChange({ search: e.target.value })}
             style={{
               width: '100%',
-              padding: '0.6rem 0.8rem 0.6rem 2.2rem',
-              backgroundColor: 'var(--bg-card)',
-              border: '1px solid var(--border-color)',
-              borderRadius: 'var(--radius-md)',
-              color: 'var(--text-main)',
+              padding: '0.55rem 0.8rem 0.55rem 2.2rem',
+              backgroundColor: 'var(--md-sys-color-surface)',
+              border: '1px solid var(--md-sys-color-outline-variant)',
+              borderRadius: 'var(--md-shape-sm)',
+              color: 'var(--md-sys-color-on-surface)',
               fontSize: '0.875rem',
               outline: 'none',
-              transition: 'border-color var(--transition-fast)',
+              transition: 'border-color var(--md-transition)',
             }}
-            onFocus={(e) => (e.target.style.borderColor = 'var(--primary)')}
-            onBlur={(e) => (e.target.style.borderColor = 'var(--border-color)')}
+            onFocus={(e) => (e.target.style.borderColor = 'var(--md-sys-color-primary)')}
+            onBlur={(e) => (e.target.style.borderColor = 'var(--md-sys-color-outline-variant)')}
           />
           <Search
             size={16}
             style={{
               position: 'absolute',
-              left: '0.7rem',
+              left: '0.75rem',
               top: '50%',
               transform: 'translateY(-50%)',
-              color: 'var(--text-subtle)',
+              color: 'var(--md-sys-color-outline)',
             }}
           />
         </div>
@@ -156,7 +158,7 @@ export function DynamicFilterPanel({
 
       {/* 2. Categories Filter */}
       {facetData?.categories && facetData.categories.length > 0 && (
-        <div style={{ borderTop: '1px solid var(--border-color)', paddingTop: '1.2rem' }}>
+        <div style={{ borderTop: '1px solid var(--md-sys-color-outline-variant)', paddingTop: '1.2rem' }}>
           <div
             onClick={() => toggleSection('categories')}
             style={{
@@ -169,9 +171,9 @@ export function DynamicFilterPanel({
           >
             <span
               style={{
-                fontSize: '0.8rem',
+                fontSize: '0.78rem',
                 fontWeight: 700,
-                color: 'var(--text-muted)',
+                color: 'var(--md-sys-color-on-surface-variant)',
                 textTransform: 'uppercase',
                 letterSpacing: '0.04em',
               }}
@@ -182,7 +184,7 @@ export function DynamicFilterPanel({
           </div>
 
           {!collapsedSections.categories && (
-            <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.4rem' }}>
+            <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.35rem' }}>
               {facetData.categories.map((cat) => {
                 const isSelected = filters.category === cat;
                 return (
@@ -190,16 +192,22 @@ export function DynamicFilterPanel({
                     key={cat}
                     onClick={() => handleCategoryClick(cat)}
                     style={{
-                      padding: '0.35rem 0.7rem',
+                      padding: '0.35rem 0.75rem',
                       fontSize: '0.78rem',
-                      fontWeight: isSelected ? 600 : 400,
-                      backgroundColor: isSelected ? 'var(--primary)' : 'var(--bg-card)',
-                      color: isSelected ? '#ffffff' : 'var(--text-muted)',
+                      fontWeight: isSelected ? 600 : 500,
+                      backgroundColor: isSelected
+                        ? 'var(--md-sys-color-primary-container)'
+                        : 'var(--md-sys-color-surface)',
+                      color: isSelected
+                        ? 'var(--md-sys-color-on-primary-container)'
+                        : 'var(--md-sys-color-on-surface-variant)',
                       border: '1px solid',
-                      borderColor: isSelected ? 'var(--primary)' : 'var(--border-color)',
-                      borderRadius: 'var(--radius-full)',
+                      borderColor: isSelected
+                        ? 'var(--md-sys-color-primary)'
+                        : 'var(--md-sys-color-outline-variant)',
+                      borderRadius: 'var(--md-shape-sm)',
                       cursor: 'pointer',
-                      transition: 'all var(--transition-fast)',
+                      transition: 'all var(--md-transition)',
                     }}
                   >
                     {cat}
@@ -212,7 +220,7 @@ export function DynamicFilterPanel({
       )}
 
       {/* 3. Price Range Filter */}
-      <div style={{ borderTop: '1px solid var(--border-color)', paddingTop: '1.2rem' }}>
+      <div style={{ borderTop: '1px solid var(--md-sys-color-outline-variant)', paddingTop: '1.2rem' }}>
         <div
           onClick={() => toggleSection('price')}
           style={{
@@ -225,9 +233,9 @@ export function DynamicFilterPanel({
         >
           <span
             style={{
-              fontSize: '0.8rem',
+              fontSize: '0.78rem',
               fontWeight: 700,
-              color: 'var(--text-muted)',
+              color: 'var(--md-sys-color-on-surface-variant)',
               textTransform: 'uppercase',
               letterSpacing: '0.04em',
             }}
@@ -241,33 +249,33 @@ export function DynamicFilterPanel({
           <div style={{ display: 'flex', gap: '0.5rem', alignItems: 'center' }}>
             <input
               type="number"
-              placeholder="Min $"
+              placeholder="Mín $"
               value={filters.min_price || ''}
               onChange={(e) => onFilterChange({ min_price: e.target.value })}
               style={{
                 width: '50%',
-                padding: '0.5rem 0.6rem',
-                backgroundColor: 'var(--bg-card)',
-                border: '1px solid var(--border-color)',
-                borderRadius: 'var(--radius-md)',
-                color: 'var(--text-main)',
+                padding: '0.5rem 0.65rem',
+                backgroundColor: 'var(--md-sys-color-surface)',
+                border: '1px solid var(--md-sys-color-outline-variant)',
+                borderRadius: 'var(--md-shape-sm)',
+                color: 'var(--md-sys-color-on-surface)',
                 fontSize: '0.8rem',
                 fontFamily: 'var(--font-mono)',
               }}
             />
-            <span style={{ color: 'var(--text-subtle)' }}>-</span>
+            <span style={{ color: 'var(--md-sys-color-outline)' }}>–</span>
             <input
               type="number"
-              placeholder="Max $"
+              placeholder="Máx $"
               value={filters.max_price || ''}
               onChange={(e) => onFilterChange({ max_price: e.target.value })}
               style={{
                 width: '50%',
-                padding: '0.5rem 0.6rem',
-                backgroundColor: 'var(--bg-card)',
-                border: '1px solid var(--border-color)',
-                borderRadius: 'var(--radius-md)',
-                color: 'var(--text-main)',
+                padding: '0.5rem 0.65rem',
+                backgroundColor: 'var(--md-sys-color-surface)',
+                border: '1px solid var(--md-sys-color-outline-variant)',
+                borderRadius: 'var(--md-shape-sm)',
+                color: 'var(--md-sys-color-on-surface)',
                 fontSize: '0.8rem',
                 fontFamily: 'var(--font-mono)',
               }}
@@ -278,34 +286,33 @@ export function DynamicFilterPanel({
 
       {/* 4. Dynamic Attributes Discovered from MongoDB (RF-01.3) */}
       {facetData?.dynamic_attributes && Object.keys(facetData.dynamic_attributes).length > 0 && (
-        <div style={{ borderTop: '1px solid var(--border-color)', paddingTop: '1.2rem' }}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '0.4rem', marginBottom: '1rem' }}>
-            <Tag size={15} color="var(--primary)" />
+        <div style={{ borderTop: '1px solid var(--md-sys-color-outline-variant)', paddingTop: '1.2rem' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '0.4rem', marginBottom: '0.85rem' }}>
+            <Tag size={15} color="var(--md-sys-color-primary)" />
             <span
               style={{
-                fontSize: '0.8rem',
+                fontSize: '0.78rem',
                 fontWeight: 700,
-                color: 'var(--text-muted)',
+                color: 'var(--md-sys-color-on-surface-variant)',
                 textTransform: 'uppercase',
                 letterSpacing: '0.04em',
               }}
             >
-              Atributos Dinámicos
+              Atributos
             </span>
           </div>
 
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '0.85rem' }}>
             {Object.entries(facetData.dynamic_attributes).map(([attrKey, values]) => {
               const activeVal = filters.dynamic_attributes?.[attrKey];
               return (
                 <div key={attrKey}>
                   <div
                     style={{
-                      fontSize: '0.75rem',
-                      fontFamily: 'var(--font-mono)',
-                      color: 'var(--text-subtle)',
+                      fontSize: '0.72rem',
+                      color: 'var(--md-sys-color-outline)',
                       textTransform: 'capitalize',
-                      marginBottom: '0.4rem',
+                      marginBottom: '0.35rem',
                       fontWeight: 600,
                     }}
                   >
@@ -321,14 +328,19 @@ export function DynamicFilterPanel({
                           style={{
                             padding: '0.25rem 0.55rem',
                             fontSize: '0.72rem',
-                            fontFamily: 'var(--font-mono)',
-                            backgroundColor: isSelected ? 'var(--primary-light)' : 'rgba(255, 255, 255, 0.03)',
-                            color: isSelected ? 'var(--primary)' : 'var(--text-muted)',
+                            backgroundColor: isSelected
+                              ? 'var(--md-sys-color-primary-container)'
+                              : 'var(--md-sys-color-surface)',
+                            color: isSelected
+                              ? 'var(--md-sys-color-on-primary-container)'
+                              : 'var(--md-sys-color-on-surface-variant)',
                             border: '1px solid',
-                            borderColor: isSelected ? 'var(--primary-border)' : 'var(--border-color)',
-                            borderRadius: '4px',
+                            borderColor: isSelected
+                              ? 'var(--md-sys-color-primary)'
+                              : 'var(--md-sys-color-outline-variant)',
+                            borderRadius: 'var(--md-shape-xs)',
                             cursor: 'pointer',
-                            transition: 'all var(--transition-fast)',
+                            transition: 'all var(--md-transition)',
                           }}
                         >
                           {String(val)}
@@ -346,15 +358,14 @@ export function DynamicFilterPanel({
       {/* Result Counter Notice */}
       <div
         style={{
-          borderTop: '1px solid var(--border-color)',
-          paddingTop: '1rem',
+          borderTop: '1px solid var(--md-sys-color-outline-variant)',
+          paddingTop: '0.85rem',
           fontSize: '0.75rem',
-          fontFamily: 'var(--font-mono)',
-          color: 'var(--text-subtle)',
+          color: 'var(--md-sys-color-outline)',
           textAlign: 'center',
         }}
       >
-        Mostrando {totalResults} producto{totalResults === 1 ? '' : 's'}
+        {totalResults} resultado{totalResults === 1 ? '' : 's'} disponible{totalResults === 1 ? '' : 's'}
       </div>
     </aside>
   );

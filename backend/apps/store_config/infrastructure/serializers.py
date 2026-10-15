@@ -20,6 +20,7 @@ class StoreConfigSerializer(serializers.Serializer):
     logo_url = serializers.CharField(allow_blank=True)
     favicon_url = serializers.CharField(allow_blank=True)
     catalog_layout = serializers.CharField(max_length=20)
+    color_mode = serializers.CharField(max_length=10)
     updated_at = serializers.CharField(allow_null=True)
 
 
@@ -34,5 +35,9 @@ class UpdateStoreConfigSerializer(serializers.Serializer):
     favicon_url = serializers.CharField(allow_blank=True, required=False)
     catalog_layout = serializers.ChoiceField(
         choices=['grid-3', 'grid-4', 'list'],
+        required=False
+    )
+    color_mode = serializers.ChoiceField(
+        choices=['light', 'dark'],
         required=False
     )

@@ -47,6 +47,7 @@ class UpdateStoreConfigUseCase:
             logo_url=dto.logo_url,
             favicon_url=dto.favicon_url,
             catalog_layout=dto.catalog_layout,
+            color_mode=dto.color_mode,
         )
 
         persisted = self._repository.save_config(current_config)

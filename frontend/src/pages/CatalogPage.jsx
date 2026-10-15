@@ -6,6 +6,7 @@
  *
  * Changelog:
  * - 2026-10-15 [v0.1.0]: Initial implementation of CatalogPage with grid-3, grid-4, and list view structures.
+ * - 2026-10-15 [v0.2.0]: Updated with Material Design 3 surfaces, segmented controls, and refined typography.
  */
 
 import React, { useState, useEffect, useCallback } from 'react';
@@ -21,7 +22,6 @@ export function CatalogPage({ initialCategory = '' }) {
   // Active layout defaults to store configuration (RF-01.4)
   const [activeLayout, setActiveLayout] = useState(config.catalog_layout || 'grid-3');
 
-  // Synchronize when store config loads
   useEffect(() => {
     if (config.catalog_layout) {
       setActiveLayout(config.catalog_layout);
@@ -50,7 +50,7 @@ export function CatalogPage({ initialCategory = '' }) {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
-  // Load facets once
+  // Load facets
   useEffect(() => {
     async function loadFacets() {
       try {
@@ -63,13 +63,12 @@ export function CatalogPage({ initialCategory = '' }) {
     loadFacets();
   }, []);
 
-  // Fetch products whenever filters change
+  // Fetch products
   const fetchProducts = useCallback(async () => {
     try {
       setLoading(true);
       setError(null);
 
-      // Build query params including dynamic attributes prefixed with 'attr_'
       const params = {
         search: filters.search,
         category: filters.category,
@@ -104,7 +103,7 @@ export function CatalogPage({ initialCategory = '' }) {
     setFilters((prev) => ({
       ...prev,
       ...partial,
-      page: 1, // Reset to page 1 on filter mutation
+      page: 1,
     }));
   };
 
@@ -133,15 +132,15 @@ export function CatalogPage({ initialCategory = '' }) {
           gap: '1rem',
           marginBottom: '2rem',
           paddingBottom: '1.25rem',
-          borderBottom: '1px solid var(--border-color)',
+          borderBottom: '1px solid var(--md-sys-color-outline-variant)',
         }}
       >
         <div>
-          <h1 style={{ fontSize: '1.75rem', fontWeight: 800, color: 'var(--text-main)' }}>
-            Catálogo de Productos
+          <h1 style={{ fontSize: '1.75rem', fontWeight: 800, color: 'var(--md-sys-color-on-surface)', letterSpacing: '-0.02em' }}>
+            Catálogo
           </h1>
-          <p style={{ fontSize: '0.875rem', color: 'var(--text-muted)' }}>
-            Explora la oferta comunitaria con atributos específicos por rubro (MongoDB Polimórfico).
+          <p style={{ fontSize: '0.875rem', color: 'var(--md-sys-color-on-surface-variant)' }}>
+            Explora los productos con atributos dinámicos y filtros especializados.
           </p>
         </div>
 
@@ -149,15 +148,15 @@ export function CatalogPage({ initialCategory = '' }) {
         <div style={{ display: 'flex', alignItems: 'center', gap: '1rem', flexWrap: 'wrap' }}>
           {/* Sort Dropdown */}
           <div style={{ display: 'flex', alignItems: 'center', gap: '0.4rem' }}>
-            <ArrowUpDown size={15} color="var(--text-subtle)" />
+            <ArrowUpDown size={15} color="var(--md-sys-color-outline)" />
             <select
               value={filters.sort_by}
               onChange={(e) => handleFilterChange({ sort_by: e.target.value })}
               style={{
-                backgroundColor: 'var(--bg-card)',
-                border: '1px solid var(--border-color)',
-                borderRadius: 'var(--radius-md)',
-                color: 'var(--text-main)',
+                backgroundColor: 'var(--md-sys-color-surface-container)',
+                border: '1px solid var(--md-sys-color-outline-variant)',
+                borderRadius: 'var(--md-shape-sm)',
+                color: 'var(--md-sys-color-on-surface)',
                 fontSize: '0.85rem',
                 padding: '0.45rem 0.75rem',
                 outline: 'none',
@@ -171,70 +170,70 @@ export function CatalogPage({ initialCategory = '' }) {
             </select>
           </div>
 
-          {/* Layout Switcher Controls (RF-01.4: grid-3, grid-4, list) */}
+          {/* M3 Segmented Layout Switcher (RF-01.4: grid-3, grid-4, list) */}
           <div
             style={{
               display: 'flex',
               alignItems: 'center',
-              backgroundColor: 'var(--bg-card)',
-              border: '1px solid var(--border-color)',
-              borderRadius: 'var(--radius-md)',
+              backgroundColor: 'var(--md-sys-color-surface-container)',
+              border: '1px solid var(--md-sys-color-outline-variant)',
+              borderRadius: 'var(--md-shape-full)',
               padding: '0.2rem',
-              gap: '0.2rem',
+              gap: '0.15rem',
             }}
           >
             <button
               onClick={() => setActiveLayout('grid-3')}
               title="Cuadrícula 3 Columnas"
               style={{
-                padding: '0.35rem 0.55rem',
-                borderRadius: '4px',
+                padding: '0.35rem 0.65rem',
+                borderRadius: 'var(--md-shape-full)',
                 border: 'none',
-                backgroundColor: activeLayout === 'grid-3' ? 'var(--primary)' : 'transparent',
-                color: activeLayout === 'grid-3' ? '#ffffff' : 'var(--text-subtle)',
+                backgroundColor: activeLayout === 'grid-3' ? 'var(--md-sys-color-primary-container)' : 'transparent',
+                color: activeLayout === 'grid-3' ? 'var(--md-sys-color-on-primary-container)' : 'var(--md-sys-color-on-surface-variant)',
                 cursor: 'pointer',
                 display: 'flex',
                 alignItems: 'center',
-                transition: 'all var(--transition-fast)',
+                transition: 'all var(--md-transition)',
               }}
             >
-              <Grid3X3 size={16} />
+              <Grid3X3 size={15} />
             </button>
 
             <button
               onClick={() => setActiveLayout('grid-4')}
               title="Cuadrícula 4 Columnas"
               style={{
-                padding: '0.35rem 0.55rem',
-                borderRadius: '4px',
+                padding: '0.35rem 0.65rem',
+                borderRadius: 'var(--md-shape-full)',
                 border: 'none',
-                backgroundColor: activeLayout === 'grid-4' ? 'var(--primary)' : 'transparent',
-                color: activeLayout === 'grid-4' ? '#ffffff' : 'var(--text-subtle)',
+                backgroundColor: activeLayout === 'grid-4' ? 'var(--md-sys-color-primary-container)' : 'transparent',
+                color: activeLayout === 'grid-4' ? 'var(--md-sys-color-on-primary-container)' : 'var(--md-sys-color-on-surface-variant)',
                 cursor: 'pointer',
                 display: 'flex',
                 alignItems: 'center',
-                transition: 'all var(--transition-fast)',
+                transition: 'all var(--md-transition)',
               }}
             >
-              <LayoutGrid size={16} />
+              <LayoutGrid size={15} />
             </button>
 
             <button
               onClick={() => setActiveLayout('list')}
               title="Vista de Lista con descripción extendida"
               style={{
-                padding: '0.35rem 0.55rem',
-                borderRadius: '4px',
+                padding: '0.35rem 0.65rem',
+                borderRadius: 'var(--md-shape-full)',
                 border: 'none',
-                backgroundColor: activeLayout === 'list' ? 'var(--primary)' : 'transparent',
-                color: activeLayout === 'list' ? '#ffffff' : 'var(--text-subtle)',
+                backgroundColor: activeLayout === 'list' ? 'var(--md-sys-color-primary-container)' : 'transparent',
+                color: activeLayout === 'list' ? 'var(--md-sys-color-on-primary-container)' : 'var(--md-sys-color-on-surface-variant)',
                 cursor: 'pointer',
                 display: 'flex',
                 alignItems: 'center',
-                transition: 'all var(--transition-fast)',
+                transition: 'all var(--md-transition)',
               }}
             >
-              <List size={16} />
+              <List size={15} />
             </button>
           </div>
         </div>
@@ -244,13 +243,12 @@ export function CatalogPage({ initialCategory = '' }) {
       <div
         style={{
           display: 'grid',
-          gridTemplateColumns: '280px 1fr',
+          gridTemplateColumns: '270px 1fr',
           gap: '2rem',
           alignItems: 'start',
         }}
         className="catalog-layout-grid"
       >
-        {/* Dynamic Facet Filter Sidebar */}
         <DynamicFilterPanel
           filters={filters}
           facetData={facetData}
@@ -259,7 +257,6 @@ export function CatalogPage({ initialCategory = '' }) {
           totalResults={totalProducts}
         />
 
-        {/* Product Items Region */}
         <section>
           {loading ? (
             <div
@@ -268,37 +265,34 @@ export function CatalogPage({ initialCategory = '' }) {
                 flexDirection: 'column',
                 alignItems: 'center',
                 justifyContent: 'center',
-                minHeight: '360px',
+                minHeight: '340px',
                 gap: '1rem',
-                color: 'var(--text-muted)',
+                color: 'var(--md-sys-color-on-surface-variant)',
               }}
             >
-              <Loader2 size={32} className="spin-animation" color="var(--primary)" />
-              <p style={{ fontFamily: 'var(--font-mono)', fontSize: '0.9rem' }}>
-                Cargando catálogo flexible desde MongoDB...
-              </p>
+              <Loader2 size={30} className="spin-animation" color="var(--md-sys-color-primary)" />
+              <p style={{ fontSize: '0.875rem' }}>Cargando catálogo...</p>
             </div>
           ) : error ? (
             <div
               style={{
-                backgroundColor: 'rgba(239, 68, 68, 0.1)',
-                border: '1px solid rgba(239, 68, 68, 0.3)',
-                borderRadius: 'var(--radius-lg)',
+                backgroundColor: 'var(--md-sys-color-error-container)',
+                border: '1px solid var(--md-sys-color-error)',
+                borderRadius: 'var(--md-shape-md)',
                 padding: '2rem',
                 textAlign: 'center',
+                color: 'var(--md-sys-color-on-error-container)',
               }}
             >
-              <p style={{ color: 'var(--danger)', fontWeight: 600, marginBottom: '0.5rem' }}>
-                Error al cargar productos: {error}
-              </p>
+              <p style={{ fontWeight: 600, marginBottom: '0.75rem' }}>Error al cargar catálogo: {error}</p>
               <button
                 onClick={fetchProducts}
                 style={{
                   padding: '0.5rem 1rem',
-                  backgroundColor: 'var(--bg-card)',
-                  border: '1px solid var(--border-color)',
-                  color: 'var(--text-main)',
-                  borderRadius: 'var(--radius-md)',
+                  backgroundColor: 'var(--md-sys-color-surface)',
+                  border: '1px solid var(--md-sys-color-outline-variant)',
+                  color: 'var(--md-sys-color-on-surface)',
+                  borderRadius: 'var(--md-shape-sm)',
                   cursor: 'pointer',
                   fontSize: '0.85rem',
                 }}
@@ -309,34 +303,34 @@ export function CatalogPage({ initialCategory = '' }) {
           ) : products.length === 0 ? (
             <div
               style={{
-                backgroundColor: 'var(--bg-card)',
-                border: '1px solid var(--border-color)',
-                borderRadius: 'var(--radius-lg)',
+                backgroundColor: 'var(--md-sys-color-surface-container-low)',
+                border: '1px solid var(--md-sys-color-outline-variant)',
+                borderRadius: 'var(--md-shape-lg)',
                 padding: '4rem 2rem',
                 textAlign: 'center',
               }}
             >
-              <PackageOpen size={48} color="var(--text-subtle)" style={{ marginBottom: '1rem' }} />
-              <h3 style={{ fontSize: '1.25rem', fontWeight: 700, marginBottom: '0.5rem' }}>
+              <PackageOpen size={44} color="var(--md-sys-color-outline)" style={{ marginBottom: '1rem' }} />
+              <h3 style={{ fontSize: '1.2rem', fontWeight: 700, marginBottom: '0.4rem', color: 'var(--md-sys-color-on-surface)' }}>
                 No se encontraron productos
               </h3>
-              <p style={{ color: 'var(--text-muted)', fontSize: '0.875rem', marginBottom: '1.5rem' }}>
-                Intenta ajustar los filtros de búsqueda o seleccionar otros atributos dinámicos.
+              <p style={{ color: 'var(--md-sys-color-on-surface-variant)', fontSize: '0.875rem', marginBottom: '1.5rem' }}>
+                Prueba ajustando los términos de búsqueda o limpiando los filtros seleccionados.
               </p>
               <button
                 onClick={handleResetFilters}
                 style={{
-                  padding: '0.6rem 1.25rem',
-                  backgroundColor: 'var(--primary)',
-                  color: '#ffffff',
+                  padding: '0.6rem 1.4rem',
+                  backgroundColor: 'var(--md-sys-color-primary)',
+                  color: 'var(--md-sys-color-on-primary)',
                   border: 'none',
-                  borderRadius: 'var(--radius-md)',
+                  borderRadius: 'var(--md-shape-full)',
                   fontWeight: 600,
-                  fontSize: '0.875rem',
+                  fontSize: '0.85rem',
                   cursor: 'pointer',
                 }}
               >
-                Restablecer todos los filtros
+                Limpiar filtros
               </button>
             </div>
           ) : (
@@ -357,7 +351,6 @@ export function CatalogPage({ initialCategory = '' }) {
         </section>
       </div>
 
-      {/* Responsive layout styles */}
       <style>{`
         @media (max-width: 900px) {
           .catalog-layout-grid {

@@ -1,11 +1,12 @@
 /*
  * Module: StoreConfigContext
- * Description: React context managing theme application, dynamic favicon injection, and store state
+ * Description: React context managing M3 theme application, light/dark color modes, dynamic favicon, and store state
  * Created: 2026-10-15
  * by: Bastian Proboste :D
  *
  * Changelog:
  * - 2026-10-15 [v0.1.0]: Initial implementation of StoreConfigContext with dynamic favicon and theme injection.
+ * - 2026-10-15 [v0.2.0]: Material Design 3 (M3) support with light/dark color modes and refined defaults.
  */
 
 import React, { createContext, useContext, useState, useEffect, useCallback } from 'react';
@@ -15,11 +16,12 @@ const StoreConfigContext = createContext(null);
 
 const DEFAULT_CONFIG = {
   id: null,
-  store_name: 'Mi Emprendimiento Comunitario',
-  hero_title: 'Impulsa tu Negocio Local con Nuestra Vitrina Digital',
-  hero_subtitle: 'Descubre productos artesanales, sostenibles y de alta calidad elaborados por emprendedores de nuestra comunidad.',
+  store_name: 'Tienda & Estudio',
+  hero_title: 'Diseño, Calidad y Autenticidad en Cada Detalle',
+  hero_subtitle: 'Descubre una cuidada selección de productos creados con dedicación, sostenibilidad y excelencia.',
   hero_cta_text: 'Explorar Catálogo',
   theme_id: 1,
+  color_mode: 'light',
   logo_url: '',
   favicon_url: '',
   catalog_layout: 'grid-3',
@@ -31,34 +33,38 @@ export function StoreConfigProvider({ children }) {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
-  // Apply theme to root document element and update favicon
+  // Apply M3 theme and color mode to root document element
   const applyBranding = useCallback((currentConfig) => {
     const themeId = currentConfig.theme_id || 1;
+    const colorMode = currentConfig.color_mode || 'light';
+
     document.documentElement.setAttribute('data-theme', String(themeId));
+    document.documentElement.setAttribute('data-color-mode', colorMode);
 
     // Dynamic Favicon Injection (RF-01.2)
-    const faviconElement = document.getElementById('app-dynamic-favicon') ||
+    const faviconElement =
+      document.getElementById('app-dynamic-favicon') ||
       document.querySelector("link[rel*='icon']");
 
     if (faviconElement) {
       if (currentConfig.favicon_url && currentConfig.favicon_url.trim()) {
         faviconElement.href = currentConfig.favicon_url;
       } else {
-        // Fallback SVG favicon matching active theme color
+        // Fallback SVG favicon using M3 seed
         const themeColors = {
-          1: '%2310b981', // Emerald
-          2: '%230284c7', // Ocean Sky
-          3: '%23059669', // Forest Green
-          4: '%23d97706', // Warm Amber
+          1: '%23415F91', // M3 Sapphire Blue
+          2: '%23386A20', // M3 Sage Green
+          3: '%238B5022', // M3 Warm Terracotta
+          4: '%234A5F76', // M3 Slate Quartz
         };
-        const color = themeColors[themeId] || '%2310b981';
+        const color = themeColors[themeId] || '%23415F91';
         faviconElement.href = `data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='${color}'><circle cx='12' cy='12' r='10'/></svg>`;
       }
     }
 
     // Dynamic Title
     if (currentConfig.store_name) {
-      document.title = `${currentConfig.store_name} | Plataforma E-commerce`;
+      document.title = `${currentConfig.store_name} | Catálogo Oficial`;
     }
   }, []);
 
@@ -101,6 +107,12 @@ export function StoreConfigProvider({ children }) {
     applyBranding(merged);
   };
 
+  const toggleColorMode = async () => {
+    const nextMode = config.color_mode === 'dark' ? 'light' : 'dark';
+    previewConfig({ color_mode: nextMode });
+    await saveConfig({ color_mode: nextMode });
+  };
+
   return (
     <StoreConfigContext.Provider
       value={{
@@ -109,6 +121,7 @@ export function StoreConfigProvider({ children }) {
         error,
         saveConfig,
         previewConfig,
+        toggleColorMode,
         refreshConfig: loadConfig,
       }}
     >

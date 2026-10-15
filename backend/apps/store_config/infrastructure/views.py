@@ -65,6 +65,7 @@ class StoreConfigAPIView(APIView):
             logo_url=validated.get('logo_url'),
             favicon_url=validated.get('favicon_url'),
             catalog_layout=validated.get('catalog_layout'),
+            color_mode=validated.get('color_mode'),
         )
 
         try:

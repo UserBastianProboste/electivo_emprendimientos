@@ -53,15 +53,18 @@ class StoreConfigDomainTests(TestCase):
         entity = StoreConfig.create_default()
         self.assertEqual(entity.theme_id.value, 1)
         self.assertEqual(entity.catalog_layout.value, "grid-3")
+        self.assertEqual(entity.color_mode.value, "light")
 
         entity.update_configuration(
             store_name="Tienda Gourmet",
             theme_id=3,
             catalog_layout="list",
+            color_mode="dark",
         )
         self.assertEqual(entity.store_name, "Tienda Gourmet")
         self.assertEqual(entity.theme_id.value, 3)
         self.assertEqual(entity.catalog_layout.value, "list")
+        self.assertEqual(entity.color_mode.value, "dark")
 
 
 class StoreConfigIntegrationTests(TestCase):
@@ -78,6 +81,7 @@ class StoreConfigIntegrationTests(TestCase):
         self.assertIsNotNone(dto)
         self.assertEqual(dto.theme_id, 1)
         self.assertEqual(dto.catalog_layout, "grid-3")
+        self.assertEqual(dto.color_mode, "light")
         self.assertEqual(StoreConfigModel.objects.count(), 1)
 
     def test_api_get_store_config_endpoint(self) -> None:
@@ -85,6 +89,7 @@ class StoreConfigIntegrationTests(TestCase):
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertIn("store_name", response.data)
         self.assertIn("theme_id", response.data)
+        self.assertIn("color_mode", response.data)
         self.assertEqual(response.data["theme_id"], 1)
 
     def test_api_patch_store_config_success(self) -> None:
@@ -92,6 +97,7 @@ class StoreConfigIntegrationTests(TestCase):
             "store_name": "Artesanias del Sur",
             "theme_id": 2,
             "catalog_layout": "grid-4",
+            "color_mode": "dark",
             "hero_title": "Tradicion y Calidad",
         }
         response = self.client.patch('/api/store-config/', payload, format='json')
@@ -99,6 +105,7 @@ class StoreConfigIntegrationTests(TestCase):
         self.assertEqual(response.data["store_name"], "Artesanias del Sur")
         self.assertEqual(response.data["theme_id"], 2)
         self.assertEqual(response.data["catalog_layout"], "grid-4")
+        self.assertEqual(response.data["color_mode"], "dark")
 
     def test_api_patch_store_config_invalid_theme(self) -> None:
         payload = {"theme_id": 99}

@@ -8,7 +8,7 @@
 
 from dataclasses import dataclass
 from typing import Optional
-from apps.store_config.domain.value_objects import ThemeId, CatalogLayout
+from apps.store_config.domain.value_objects import ThemeId, CatalogLayout, ColorMode
 
 
 @dataclass
@@ -23,6 +23,7 @@ class StoreConfig:
     logo_url: str
     favicon_url: str
     catalog_layout: CatalogLayout
+    color_mode: ColorMode = ColorMode("light")
     updated_at: Optional[str] = None
 
     @classmethod
@@ -30,14 +31,15 @@ class StoreConfig:
         """Factory method returning default system store configuration."""
         return cls(
             id=None,
-            store_name="Mi Emprendimiento Comunitario",
-            hero_title="Impulsa tu Negocio Local con Nuestra Vitrina Digital",
-            hero_subtitle="Descubre productos artesanales, sostenibles y de alta calidad elaborados por emprendedores de nuestra comunidad.",
-            hero_cta_text="Explorar Catalogo",
+            store_name="Tienda & Estudio",
+            hero_title="Diseño, Calidad y Autenticidad en Cada Detalle",
+            hero_subtitle="Descubre una cuidada selección de productos creados con dedicación, sostenibilidad y excelencia.",
+            hero_cta_text="Explorar Catálogo",
             theme_id=ThemeId(1),
             logo_url="",
             favicon_url="",
             catalog_layout=CatalogLayout("grid-3"),
+            color_mode=ColorMode("light"),
             updated_at=None,
         )
 
@@ -51,6 +53,7 @@ class StoreConfig:
         logo_url: Optional[str] = None,
         favicon_url: Optional[str] = None,
         catalog_layout: Optional[str] = None,
+        color_mode: Optional[str] = None,
     ) -> None:
         """Mutate entity attributes with domain validation."""
         if store_name is not None and store_name.strip():
@@ -69,3 +72,5 @@ class StoreConfig:
             self.favicon_url = favicon_url.strip()
         if catalog_layout is not None:
             self.catalog_layout = CatalogLayout(catalog_layout)
+        if color_mode is not None:
+            self.color_mode = ColorMode(color_mode.strip().lower())

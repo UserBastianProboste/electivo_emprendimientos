@@ -8,7 +8,7 @@
 
 from typing import Optional
 from apps.store_config.domain.entities import StoreConfig
-from apps.store_config.domain.value_objects import ThemeId, CatalogLayout
+from apps.store_config.domain.value_objects import ThemeId, CatalogLayout, ColorMode
 from apps.store_config.domain.ports import StoreConfigRepositoryPort
 from apps.store_config.infrastructure.models import StoreConfigModel
 
@@ -37,6 +37,7 @@ class DjangoORMStoreConfigRepository(StoreConfigRepositoryPort):
         model.logo_url = config.logo_url
         model.favicon_url = config.favicon_url
         model.catalog_layout = config.catalog_layout.value
+        model.color_mode = config.color_mode.value
         model.save()
 
         return self._to_domain(model)
@@ -54,5 +55,6 @@ class DjangoORMStoreConfigRepository(StoreConfigRepositoryPort):
             logo_url=model.logo_url,
             favicon_url=model.favicon_url,
             catalog_layout=CatalogLayout(model.catalog_layout),
+            color_mode=ColorMode(getattr(model, 'color_mode', 'light') or 'light'),
             updated_at=model.updated_at.isoformat() if model.updated_at else None,
         )

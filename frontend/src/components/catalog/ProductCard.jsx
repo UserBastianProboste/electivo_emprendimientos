@@ -1,15 +1,16 @@
 /*
  * Module: ProductCard
- * Description: Adaptable product card supporting Grid-3, Grid-4, and List layout structures (RF-01.4)
+ * Description: Material Design 3 (M3) product card supporting Grid-3, Grid-4, and List layout structures (RF-01.4)
  * Created: 2026-10-15
  * by: Bastian Proboste :D
  *
  * Changelog:
  * - 2026-10-15 [v0.1.0]: Initial implementation supporting polymorphic dynamic attributes.
+ * - 2026-10-15 [v0.2.0]: Refined with Google M3 surfaces, elevation, and tonal styling.
  */
 
 import React from 'react';
-import { Tag, CheckCircle2, AlertCircle, ShoppingCart } from 'lucide-react';
+import { CheckCircle2, AlertCircle, ShoppingBag } from 'lucide-react';
 
 function formatCLP(amount) {
   if (amount === undefined || amount === null) return '$0';
@@ -34,11 +35,20 @@ export function ProductCard({ product, layout = 'grid-3' }) {
         className="product-card-list"
         style={{
           display: 'flex',
-          backgroundColor: 'var(--bg-card)',
-          border: '1px solid var(--border-color)',
-          borderRadius: 'var(--radius-lg)',
+          backgroundColor: 'var(--md-sys-color-surface-container-low)',
+          border: '1px solid var(--md-sys-color-outline-variant)',
+          borderRadius: 'var(--md-shape-lg)',
           overflow: 'hidden',
-          transition: 'all var(--transition-fast)',
+          transition: 'border-color var(--md-transition), box-shadow var(--md-transition)',
+          boxShadow: 'var(--md-elevation-1)',
+        }}
+        onMouseEnter={(e) => {
+          e.currentTarget.style.borderColor = 'var(--md-sys-color-outline)';
+          e.currentTarget.style.boxShadow = 'var(--md-elevation-2)';
+        }}
+        onMouseLeave={(e) => {
+          e.currentTarget.style.borderColor = 'var(--md-sys-color-outline-variant)';
+          e.currentTarget.style.boxShadow = 'var(--md-elevation-1)';
         }}
       >
         {/* Left: Product Image */}
@@ -46,9 +56,9 @@ export function ProductCard({ product, layout = 'grid-3' }) {
           style={{
             width: '260px',
             minWidth: '220px',
-            height: '220px',
+            height: '210px',
             position: 'relative',
-            backgroundColor: '#000',
+            backgroundColor: 'var(--md-sys-color-surface-container)',
             flexShrink: 0,
           }}
         >
@@ -66,15 +76,15 @@ export function ProductCard({ product, layout = 'grid-3' }) {
             <div
               style={{
                 position: 'absolute',
-                top: '10px',
-                left: '10px',
-                backgroundColor: 'var(--danger)',
-                color: '#fff',
+                top: '12px',
+                left: '12px',
+                backgroundColor: 'var(--md-sys-color-error)',
+                color: 'var(--md-sys-color-on-error)',
                 fontSize: '0.7rem',
                 fontWeight: 700,
                 fontFamily: 'var(--font-mono)',
                 padding: '0.2rem 0.5rem',
-                borderRadius: '4px',
+                borderRadius: 'var(--md-shape-xs)',
               }}
             >
               OFERTA
@@ -93,21 +103,20 @@ export function ProductCard({ product, layout = 'grid-3' }) {
           }}
         >
           <div>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '0.6rem', marginBottom: '0.4rem' }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '0.6rem', marginBottom: '0.35rem' }}>
               <span
                 style={{
                   fontSize: '0.75rem',
-                  fontFamily: 'var(--font-mono)',
-                  color: 'var(--primary)',
-                  backgroundColor: 'var(--primary-light)',
-                  padding: '0.15rem 0.5rem',
-                  borderRadius: '4px',
+                  color: 'var(--md-sys-color-primary)',
                   fontWeight: 600,
+                  textTransform: 'uppercase',
+                  letterSpacing: '0.04em',
                 }}
               >
                 {product.category}
               </span>
-              <span style={{ fontSize: '0.75rem', color: 'var(--text-subtle)' }}>
+              <span style={{ fontSize: '0.75rem', color: 'var(--md-sys-color-outline)' }}>•</span>
+              <span style={{ fontSize: '0.75rem', color: 'var(--md-sys-color-outline)' }}>
                 {product.brand}
               </span>
             </div>
@@ -116,8 +125,9 @@ export function ProductCard({ product, layout = 'grid-3' }) {
               style={{
                 fontSize: '1.2rem',
                 fontWeight: 700,
-                color: 'var(--text-main)',
-                marginBottom: '0.5rem',
+                color: 'var(--md-sys-color-on-surface)',
+                marginBottom: '0.4rem',
+                letterSpacing: '-0.01em',
               }}
             >
               {product.name}
@@ -126,7 +136,7 @@ export function ProductCard({ product, layout = 'grid-3' }) {
             <p
               style={{
                 fontSize: '0.875rem',
-                color: 'var(--text-muted)',
+                color: 'var(--md-sys-color-on-surface-variant)',
                 lineHeight: 1.5,
                 marginBottom: '1rem',
               }}
@@ -136,41 +146,39 @@ export function ProductCard({ product, layout = 'grid-3' }) {
 
             {/* Dynamic Attributes Row */}
             {product.dynamic_attributes && Object.keys(product.dynamic_attributes).length > 0 && (
-              <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.5rem' }}>
+              <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.4rem' }}>
                 {Object.entries(product.dynamic_attributes).map(([key, val]) => (
                   <span
                     key={key}
                     style={{
-                      display: 'inline-flex',
-                      alignItems: 'center',
-                      gap: '0.3rem',
                       fontSize: '0.75rem',
-                      fontFamily: 'var(--font-mono)',
-                      backgroundColor: 'rgba(255, 255, 255, 0.04)',
-                      border: '1px solid var(--border-color)',
-                      color: 'var(--text-muted)',
-                      padding: '0.2rem 0.5rem',
-                      borderRadius: '4px',
+                      backgroundColor: 'var(--md-sys-color-surface-container)',
+                      color: 'var(--md-sys-color-on-surface-variant)',
+                      padding: '0.2rem 0.55rem',
+                      borderRadius: 'var(--md-shape-sm)',
                     }}
                   >
-                    <strong style={{ color: 'var(--text-main)', textTransform: 'capitalize' }}>{key}:</strong> {String(val)}
+                    <strong style={{ color: 'var(--md-sys-color-on-surface)', textTransform: 'capitalize' }}>
+                      {key}:
+                    </strong>{' '}
+                    {String(val)}
                   </span>
                 ))}
               </div>
             )}
           </div>
 
-          {/* Bottom Info: Stock status */}
-          <div style={{ display: 'flex', alignItems: 'center', gap: '0.4rem', marginTop: '1rem' }}>
+          {/* Stock indicator */}
+          <div style={{ display: 'flex', alignItems: 'center', gap: '0.35rem', marginTop: '1rem' }}>
             {inStock ? (
-              <div style={{ display: 'flex', alignItems: 'center', gap: '0.35rem', color: 'var(--success)', fontSize: '0.8rem' }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '0.35rem', color: 'var(--md-sys-color-primary)', fontSize: '0.8rem' }}>
                 <CheckCircle2 size={15} />
-                <span>En stock ({product.stock} unidades)</span>
+                <span>Disponible ({product.stock} un.)</span>
               </div>
             ) : (
-              <div style={{ display: 'flex', alignItems: 'center', gap: '0.35rem', color: 'var(--danger)', fontSize: '0.8rem' }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '0.35rem', color: 'var(--md-sys-color-error)', fontSize: '0.8rem' }}>
                 <AlertCircle size={15} />
-                <span>Agotado</span>
+                <span>Sin stock disponible</span>
               </div>
             )}
           </div>
@@ -179,22 +187,22 @@ export function ProductCard({ product, layout = 'grid-3' }) {
         {/* Right: Pricing & CTA */}
         <div
           style={{
-            width: '200px',
-            borderLeft: '1px solid var(--border-color)',
-            backgroundColor: 'rgba(0, 0, 0, 0.2)',
+            width: '190px',
+            borderLeft: '1px solid var(--md-sys-color-outline-variant)',
+            backgroundColor: 'var(--md-sys-color-surface-container)',
             padding: '1.5rem',
             display: 'flex',
             flexDirection: 'column',
             justifyContent: 'center',
             alignItems: 'flex-end',
-            gap: '0.75rem',
+            gap: '0.6rem',
           }}
         >
           {hasDiscount && (
             <span
               style={{
                 fontSize: '0.85rem',
-                color: 'var(--text-subtle)',
+                color: 'var(--md-sys-color-outline)',
                 textDecoration: 'line-through',
                 fontFamily: 'var(--font-mono)',
               }}
@@ -204,10 +212,10 @@ export function ProductCard({ product, layout = 'grid-3' }) {
           )}
           <div
             style={{
-              fontSize: '1.5rem',
+              fontSize: '1.45rem',
               fontWeight: 800,
               fontFamily: 'var(--font-mono)',
-              color: 'var(--primary)',
+              color: 'var(--md-sys-color-on-surface)',
             }}
           >
             {formatCLP(product.price)}
@@ -218,22 +226,22 @@ export function ProductCard({ product, layout = 'grid-3' }) {
             style={{
               width: '100%',
               padding: '0.65rem 1rem',
-              backgroundColor: inStock ? 'var(--primary)' : 'var(--border-color)',
-              color: '#ffffff',
+              backgroundColor: inStock ? 'var(--md-sys-color-primary)' : 'var(--md-sys-color-surface-variant)',
+              color: inStock ? 'var(--md-sys-color-on-primary)' : 'var(--md-sys-color-on-surface-variant)',
               border: 'none',
-              borderRadius: 'var(--radius-md)',
+              borderRadius: 'var(--md-shape-full)',
               fontWeight: 600,
-              fontSize: '0.875rem',
+              fontSize: '0.85rem',
               cursor: inStock ? 'pointer' : 'not-allowed',
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center',
-              gap: '0.5rem',
-              transition: 'background-color var(--transition-fast)',
+              gap: '0.45rem',
+              transition: 'opacity var(--md-transition)',
             }}
           >
-            <ShoppingCart size={16} />
-            <span>{inStock ? 'Comprar' : 'Agotado'}</span>
+            <ShoppingBag size={16} />
+            <span>{inStock ? 'Agregar' : 'Agotado'}</span>
           </button>
         </div>
       </div>
@@ -245,21 +253,24 @@ export function ProductCard({ product, layout = 'grid-3' }) {
     <div
       className="product-card-grid"
       style={{
-        backgroundColor: 'var(--bg-card)',
-        border: '1px solid var(--border-color)',
-        borderRadius: 'var(--radius-lg)',
+        backgroundColor: 'var(--md-sys-color-surface-container-low)',
+        border: '1px solid var(--md-sys-color-outline-variant)',
+        borderRadius: 'var(--md-shape-lg)',
         overflow: 'hidden',
         display: 'flex',
         flexDirection: 'column',
-        transition: 'transform var(--transition-fast), border-color var(--transition-fast)',
+        boxShadow: 'var(--md-elevation-1)',
+        transition: 'transform var(--md-transition), box-shadow var(--md-transition), border-color var(--md-transition)',
       }}
       onMouseEnter={(e) => {
         e.currentTarget.style.transform = 'translateY(-3px)';
-        e.currentTarget.style.borderColor = 'var(--border-focus)';
+        e.currentTarget.style.borderColor = 'var(--md-sys-color-outline)';
+        e.currentTarget.style.boxShadow = 'var(--md-elevation-2)';
       }}
       onMouseLeave={(e) => {
         e.currentTarget.style.transform = 'translateY(0)';
-        e.currentTarget.style.borderColor = 'var(--border-color)';
+        e.currentTarget.style.borderColor = 'var(--md-sys-color-outline-variant)';
+        e.currentTarget.style.boxShadow = 'var(--md-elevation-1)';
       }}
     >
       {/* Product Image */}
@@ -268,7 +279,7 @@ export function ProductCard({ product, layout = 'grid-3' }) {
           width: '100%',
           height: layout === 'grid-4' ? '180px' : '220px',
           position: 'relative',
-          backgroundColor: '#000',
+          backgroundColor: 'var(--md-sys-color-surface-container)',
           overflow: 'hidden',
         }}
       >
@@ -279,7 +290,6 @@ export function ProductCard({ product, layout = 'grid-3' }) {
             width: '100%',
             height: '100%',
             objectFit: 'cover',
-            transition: 'transform 300ms ease',
           }}
           loading="lazy"
         />
@@ -287,43 +297,26 @@ export function ProductCard({ product, layout = 'grid-3' }) {
           <div
             style={{
               position: 'absolute',
-              top: '8px',
-              left: '8px',
-              backgroundColor: 'var(--danger)',
-              color: '#fff',
+              top: '10px',
+              left: '10px',
+              backgroundColor: 'var(--md-sys-color-error)',
+              color: 'var(--md-sys-color-on-error)',
               fontSize: '0.68rem',
               fontWeight: 700,
               fontFamily: 'var(--font-mono)',
               padding: '0.15rem 0.45rem',
-              borderRadius: '4px',
+              borderRadius: 'var(--md-shape-xs)',
             }}
           >
             OFERTA
           </div>
         )}
-        <div
-          style={{
-            position: 'absolute',
-            bottom: '8px',
-            right: '8px',
-            backgroundColor: 'rgba(9, 9, 11, 0.85)',
-            backdropFilter: 'blur(4px)',
-            color: 'var(--text-main)',
-            fontSize: '0.7rem',
-            fontFamily: 'var(--font-mono)',
-            padding: '0.15rem 0.45rem',
-            borderRadius: '4px',
-            border: '1px solid rgba(255, 255, 255, 0.1)',
-          }}
-        >
-          {product.brand}
-        </div>
       </div>
 
       {/* Content */}
       <div
         style={{
-          padding: '1.1rem',
+          padding: '1.2rem',
           display: 'flex',
           flexDirection: 'column',
           flex: 1,
@@ -331,29 +324,31 @@ export function ProductCard({ product, layout = 'grid-3' }) {
         }}
       >
         <div>
-          <span
-            style={{
-              fontSize: '0.7rem',
-              fontFamily: 'var(--font-mono)',
-              color: 'var(--primary)',
-              backgroundColor: 'var(--primary-light)',
-              padding: '0.15rem 0.45rem',
-              borderRadius: '4px',
-              fontWeight: 600,
-              display: 'inline-block',
-              marginBottom: '0.5rem',
-            }}
-          >
-            {product.category}
-          </span>
+          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '0.35rem' }}>
+            <span
+              style={{
+                fontSize: '0.72rem',
+                color: 'var(--md-sys-color-primary)',
+                fontWeight: 600,
+                textTransform: 'uppercase',
+                letterSpacing: '0.04em',
+              }}
+            >
+              {product.category}
+            </span>
+            <span style={{ fontSize: '0.72rem', color: 'var(--md-sys-color-outline)' }}>
+              {product.brand}
+            </span>
+          </div>
 
           <h3
             style={{
-              fontSize: layout === 'grid-4' ? '0.95rem' : '1.05rem',
+              fontSize: layout === 'grid-4' ? '0.98rem' : '1.08rem',
               fontWeight: 700,
-              color: 'var(--text-main)',
+              color: 'var(--md-sys-color-on-surface)',
               marginBottom: '0.4rem',
               lineHeight: 1.35,
+              letterSpacing: '-0.01em',
             }}
           >
             {product.name}
@@ -361,10 +356,10 @@ export function ProductCard({ product, layout = 'grid-3' }) {
 
           <p
             style={{
-              fontSize: '0.8rem',
-              color: 'var(--text-muted)',
+              fontSize: '0.825rem',
+              color: 'var(--md-sys-color-on-surface-variant)',
               lineHeight: 1.45,
-              marginBottom: '0.8rem',
+              marginBottom: '0.85rem',
               display: '-webkit-box',
               WebkitLineClamp: 2,
               WebkitBoxOrient: 'vertical',
@@ -388,16 +383,14 @@ export function ProductCard({ product, layout = 'grid-3' }) {
                 <span
                   key={key}
                   style={{
-                    fontSize: '0.68rem',
-                    fontFamily: 'var(--font-mono)',
-                    backgroundColor: 'rgba(255, 255, 255, 0.04)',
-                    border: '1px solid var(--border-color)',
-                    color: 'var(--text-muted)',
-                    padding: '0.15rem 0.4rem',
-                    borderRadius: '4px',
+                    fontSize: '0.7rem',
+                    backgroundColor: 'var(--md-sys-color-surface-container)',
+                    color: 'var(--md-sys-color-on-surface-variant)',
+                    padding: '0.15rem 0.45rem',
+                    borderRadius: 'var(--md-shape-sm)',
                   }}
                 >
-                  <strong style={{ color: 'var(--text-main)', textTransform: 'capitalize' }}>{key}:</strong> {String(val)}
+                  <strong style={{ color: 'var(--md-sys-color-on-surface)', textTransform: 'capitalize' }}>{key}:</strong> {String(val)}
                 </span>
               ))}
             </div>
@@ -407,7 +400,7 @@ export function ProductCard({ product, layout = 'grid-3' }) {
         {/* Pricing & Cart Action */}
         <div
           style={{
-            borderTop: '1px solid var(--border-color)',
+            borderTop: '1px solid var(--md-sys-color-outline-variant)',
             paddingTop: '0.85rem',
             display: 'flex',
             alignItems: 'center',
@@ -420,7 +413,7 @@ export function ProductCard({ product, layout = 'grid-3' }) {
               <div
                 style={{
                   fontSize: '0.75rem',
-                  color: 'var(--text-subtle)',
+                  color: 'var(--md-sys-color-outline)',
                   textDecoration: 'line-through',
                   fontFamily: 'var(--font-mono)',
                 }}
@@ -430,10 +423,10 @@ export function ProductCard({ product, layout = 'grid-3' }) {
             )}
             <div
               style={{
-                fontSize: '1.15rem',
+                fontSize: '1.2rem',
                 fontWeight: 800,
                 fontFamily: 'var(--font-mono)',
-                color: 'var(--primary)',
+                color: 'var(--md-sys-color-on-surface)',
               }}
             >
               {formatCLP(product.price)}
@@ -443,21 +436,21 @@ export function ProductCard({ product, layout = 'grid-3' }) {
           <button
             disabled={!inStock}
             style={{
-              padding: '0.5rem 0.85rem',
-              backgroundColor: inStock ? 'var(--primary)' : 'var(--border-color)',
-              color: '#ffffff',
+              padding: '0.5rem 0.9rem',
+              backgroundColor: inStock ? 'var(--md-sys-color-primary)' : 'var(--md-sys-color-surface-variant)',
+              color: inStock ? 'var(--md-sys-color-on-primary)' : 'var(--md-sys-color-on-surface-variant)',
               border: 'none',
-              borderRadius: 'var(--radius-md)',
+              borderRadius: 'var(--md-shape-full)',
               fontWeight: 600,
               fontSize: '0.8rem',
               cursor: inStock ? 'pointer' : 'not-allowed',
               display: 'flex',
               alignItems: 'center',
               gap: '0.35rem',
-              transition: 'background-color var(--transition-fast)',
+              transition: 'opacity var(--md-transition)',
             }}
           >
-            <ShoppingCart size={15} />
+            <ShoppingBag size={14} />
             <span>{inStock ? 'Comprar' : 'Agotado'}</span>
           </button>
         </div>
