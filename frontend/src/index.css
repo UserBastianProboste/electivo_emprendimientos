@@ -1,0 +1,184 @@
+/*
+ * Module: GlobalStyles
+ * Description: Design system tokens, dark-mode themes, and layout utility rules
+ * Created: 2026-10-15
+ * by: Bastian Proboste :D
+ *
+ * Changelog:
+ * - 2026-10-15 [v0.1.0]: Initial implementation of 4 predefined themes and layout classes.
+ */
+
+:root {
+  /* Default Typography */
+  --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  --font-mono: 'JetBrains Mono', monospace;
+
+  /* Theme 1: Slate Obsidian (Default) */
+  --bg-app: #09090b;
+  --bg-surface: #121215;
+  --bg-card: #18181b;
+  --bg-card-hover: #212124;
+  --border-color: #27272a;
+  --border-focus: #3f3f46;
+  --text-main: #f4f4f5;
+  --text-muted: #a1a1aa;
+  --text-subtle: #71717a;
+  --primary: #10b981;
+  --primary-hover: #059669;
+  --primary-light: rgba(16, 185, 129, 0.15);
+  --primary-border: rgba(16, 185, 129, 0.4);
+  --accent: #34d399;
+  --danger: #ef4444;
+  --warning: #f59e0b;
+  --success: #10b981;
+  --badge-bg: rgba(255, 255, 255, 0.05);
+
+  /* Elevation */
+  --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.4);
+  --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.5), 0 2px 4px -2px rgba(0, 0, 0, 0.5);
+  --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.6), 0 4px 6px -4px rgba(0, 0, 0, 0.6);
+  --radius-sm: 6px;
+  --radius-md: 8px;
+  --radius-lg: 12px;
+  --radius-full: 9999px;
+  --transition-fast: 120ms cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Theme 2: Ocean Navy */
+[data-theme="2"] {
+  --bg-app: #060b17;
+  --bg-surface: #0a1224;
+  --bg-card: #0f1c38;
+  --bg-card-hover: #152549;
+  --border-color: #1e293b;
+  --border-focus: #334155;
+  --text-main: #f8fafc;
+  --text-muted: #94a3b8;
+  --text-subtle: #64748b;
+  --primary: #0284c7;
+  --primary-hover: #0369a1;
+  --primary-light: rgba(2, 132, 199, 0.18);
+  --primary-border: rgba(2, 132, 199, 0.4);
+  --accent: #38bdf8;
+}
+
+/* Theme 3: Forest Pine */
+[data-theme="3"] {
+  --bg-app: #04140e;
+  --bg-surface: #072017;
+  --bg-card: #0d2c20;
+  --bg-card-hover: #13392a;
+  --border-color: #184232;
+  --border-focus: #245844;
+  --text-main: #ecfdf5;
+  --text-muted: #a7f3d0;
+  --text-subtle: #6ee7b7;
+  --primary: #059669;
+  --primary-hover: #047857;
+  --primary-light: rgba(5, 150, 105, 0.18);
+  --primary-border: rgba(5, 150, 105, 0.4);
+  --accent: #10b981;
+}
+
+/* Theme 4: Sunset Amber */
+[data-theme="4"] {
+  --bg-app: #140d0a;
+  --bg-surface: #1e130e;
+  --bg-card: #291a13;
+  --bg-card-hover: #362219;
+  --border-color: #43281c;
+  --border-focus: #5f3724;
+  --text-main: #fef3c7;
+  --text-muted: #fde68a;
+  --text-subtle: #f59e0b;
+  --primary: #d97706;
+  --primary-hover: #b45309;
+  --primary-light: rgba(217, 119, 6, 0.18);
+  --primary-border: rgba(217, 119, 6, 0.4);
+  --accent: #fbbf24;
+}
+
+/* Base Reset */
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: var(--font-sans);
+  background-color: var(--bg-app);
+  color: var(--text-main);
+  min-height: 100vh;
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+button, input, select, textarea {
+  font-family: inherit;
+  color: inherit;
+}
+
+/* Common Layout Utilities */
+.container {
+  width: 100%;
+  max-width: 1280px;
+  margin-left: auto;
+  margin-right: auto;
+  padding-left: 1.5rem;
+  padding-right: 1.5rem;
+}
+
+/* Catalog Layout Classes (RF-01.4) */
+.catalog-grid-3 {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 1.5rem;
+}
+
+.catalog-grid-4 {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 1.25rem;
+}
+
+.catalog-list {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+@media (max-width: 1024px) {
+  .catalog-grid-4 {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 768px) {
+  .catalog-grid-3, .catalog-grid-4 {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 1rem;
+  }
+}
+
+@media (max-width: 540px) {
+  .catalog-grid-3, .catalog-grid-4 {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* Animations */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(6px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.animate-fade-in {
+  animation: fadeIn 150ms ease-out forwards;
+}
