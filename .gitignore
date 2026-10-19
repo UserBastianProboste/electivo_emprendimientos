@@ -54,3 +54,8 @@ frontend/.cache/
 # OS
 .DS_Store
 Thumbs.db
+
+# Office & LibreOffice lock files
+.~lock.*#
+~$*
+*.tmp
